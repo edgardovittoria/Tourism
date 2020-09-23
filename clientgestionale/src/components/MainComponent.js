@@ -21,10 +21,17 @@ class Main extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        this.props.fetchPrenotazioni();
+    }
+
     render() {
         const HomePage = () => {
             return(
-                <Home />
+                <Home 
+                    prenotazioni={this.props.prenotazioni.prenotazioni}
+                    loadingPrenotazioni={this.props.prenotazioni.isLoading}
+                    prenotazioniErrMess={this.props.prenotazioni.errMess}/>
             )
         }
         return(

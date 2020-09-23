@@ -86,7 +86,8 @@ export const postPrenotazione = (
             body: JSON.stringify(newPrenotazione),
             headers:{
                 'Content-type': 'Application/json'
-            }
+            },
+            credentials: 'same-origin'
         })
         .then().then(response => {
             if(response.ok){
