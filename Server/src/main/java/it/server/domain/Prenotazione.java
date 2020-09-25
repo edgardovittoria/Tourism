@@ -1,7 +1,6 @@
 package it.server.domain;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +25,8 @@ public class Prenotazione {
 	private Integer numeroPartecipanti;
 	@Column
 	private Float costoTotale;
-	@Column
-	private Boolean aperta;
+	//@Column
+	//private Boolean aperta;
 	@Column
 	private Boolean pagata;
 	@Column
@@ -37,15 +36,12 @@ public class Prenotazione {
 	private Turista turistaPrenotante;
 	@Column
 	private Integer postiDisponibili;
-	@Column(columnDefinition = "DATE")
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private LocalDate dataSvolgimentoAttivita;
 	@Column
-	@JsonFormat(pattern = "HH:mm")
-	private LocalTime oraSvolgimentoAttivita;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+	private LocalDateTime dataSvolgimentoAttivita;
 	@Column
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private LocalDate dataDiPrenotazione;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+	private LocalDateTime dataDiPrenotazione;
 	@ManyToOne
 	@JoinColumn(name = "id_attivita_prenotata", nullable = false)
 	private Attivita attivitaPrenotata;
@@ -77,13 +73,13 @@ public class Prenotazione {
 		this.costoTotale = costoTotale;
 	}
 
-	public Boolean getAperta() {
+	/*public Boolean getAperta() {
 		return aperta;
 	}
 
 	public void setAperta(Boolean aperta) {
 		this.aperta = aperta;
-	}
+	}*/
 
 	public Boolean getPagata() {
 		return pagata;
@@ -117,27 +113,19 @@ public class Prenotazione {
 		this.postiDisponibili = postiDisponibili;
 	}
 
-	public LocalDate getDataSvolgimentoAttivita() {
+	public LocalDateTime getDataSvolgimentoAttivita() {
 		return dataSvolgimentoAttivita;
 	}
 
-	public void setDataSvolgimentoAttivita(LocalDate dataSvolgimentoAttivita) {
+	public void setDataSvolgimentoAttivita(LocalDateTime dataSvolgimentoAttivita) {
 		this.dataSvolgimentoAttivita = dataSvolgimentoAttivita;
 	}
 
-	public LocalTime getOraSvolgimentoAttivita() {
-		return oraSvolgimentoAttivita;
-	}
-
-	public void setOraSvolgimentoAttivita(LocalTime oraSvolgimentoAttivita) {
-		this.oraSvolgimentoAttivita = oraSvolgimentoAttivita;
-	}
-
-	public LocalDate getDataDiPrenotazione() {
+	public LocalDateTime getDataDiPrenotazione() {
 		return dataDiPrenotazione;
 	}
 
-	public void setDataDiPrenotazione(LocalDate dataDiPrenotazione) {
+	public void setDataDiPrenotazione(LocalDateTime dataDiPrenotazione) {
 		this.dataDiPrenotazione = dataDiPrenotazione;
 	}
 	

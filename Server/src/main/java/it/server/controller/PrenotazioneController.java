@@ -2,6 +2,7 @@ package it.server.controller;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -43,8 +44,8 @@ public class PrenotazioneController {
 	@GetMapping("{data}")
 	public ResponseEntity<List<Prenotazione>> getPrenotazioniByDataSvolgimento(
 			@PathVariable("data") String data) throws ParseException{
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate date = LocalDate.parse(data, formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime date = LocalDateTime.parse(data, formatter);
 		List<Prenotazione> prenotazioni = prenotazioneServiceImpl.findPrenotazioneByDataSvolgimentoAttivita(date);
 		return new ResponseEntity<List<Prenotazione>>(prenotazioni, HttpStatus.OK);
 	}

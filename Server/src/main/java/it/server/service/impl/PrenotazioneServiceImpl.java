@@ -1,6 +1,6 @@
 package it.server.service.impl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -25,7 +25,7 @@ public class PrenotazioneServiceImpl implements PrenotazioneService{
 	}
 
 	@Override
-	public List<Prenotazione> findPrenotazioneByDataSvolgimentoAttivita(LocalDate dataSvolgimentoAttivita) {
+	public List<Prenotazione> findPrenotazioneByDataSvolgimentoAttivita(LocalDateTime dataSvolgimentoAttivita) {
 		return prenotazioneRepository.findByDataSvolgimentoAttivita(dataSvolgimentoAttivita);
 	}
 
@@ -38,14 +38,13 @@ public class PrenotazioneServiceImpl implements PrenotazioneService{
 	public Prenotazione updatePrenotazione(Integer id, Prenotazione prenotazione) {
 		Prenotazione prenotazioneDaModificare = prenotazioneRepository.getOne(id);
 		
-		prenotazioneDaModificare.setAperta(prenotazione.getAperta());
+		//prenotazioneDaModificare.setAperta(prenotazione.getAperta());
 		prenotazioneDaModificare.setCostoTotale(prenotazione.getCostoTotale());
 		prenotazioneDaModificare.setDataDiPrenotazione(prenotazione.getDataDiPrenotazione());
 		prenotazioneDaModificare.setServizioFotografico(prenotazione.getServizioFotografico());
 		prenotazioneDaModificare.setAttivitaPrenotata(prenotazione.getAttivitaPrenotata());
 		prenotazioneDaModificare.setDataSvolgimentoAttivita(prenotazione.getDataSvolgimentoAttivita());
 		prenotazioneDaModificare.setNumeroPartecipanti(prenotazione.getNumeroPartecipanti());
-		prenotazioneDaModificare.setOraSvolgimentoAttivita(prenotazione.getOraSvolgimentoAttivita());
 		prenotazioneDaModificare.setPagata(prenotazione.getPagata());
 		prenotazioneDaModificare.setPostiDisponibili(prenotazione.getPostiDisponibili());
 		prenotazioneDaModificare.setTuristaPrenotante(prenotazione.getTuristaPrenotante());
