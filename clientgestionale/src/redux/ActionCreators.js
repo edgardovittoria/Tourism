@@ -45,20 +45,17 @@ export const fetchPrenotazioni = () => (dispatch) => {
 export const postPrenotazione = (
     numeroPartecipanti,
     costoTotale,
-    aperta,
     pagata,
     servizioFotografico,
     turistaPrenotante,
     postiDisponibili,
     dataSvolgimentoAttivita,
-    oraSvolgimentoAttivita,
     dataDiPrenotazione,
     attivitaPrenotata) => (dispatch) => {
 
         const newPrenotazione = {
             numeroPartecipanti: numeroPartecipanti,
             costoTotale: costoTotale,
-            aperta: aperta,
             pagata: pagata,
             servizioFotografico: servizioFotografico,
             turistaPrenotante: {
@@ -68,7 +65,6 @@ export const postPrenotazione = (
             },
             postiDisponibili: postiDisponibili,
             dataSvolgimentoAttivita: dataSvolgimentoAttivita,
-            oraSvolgimentoAttivita: oraSvolgimentoAttivita,
             dataDiPrenotazione: dataDiPrenotazione,
             attivitaPrenotata: {
                 id: attivitaPrenotata.id,

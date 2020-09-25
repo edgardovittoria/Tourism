@@ -31,7 +31,8 @@ class Main extends Component {
                 <Home 
                     prenotazioni={this.props.prenotazioni.prenotazioni}
                     loadingPrenotazioni={this.props.prenotazioni.isLoading}
-                    prenotazioniErrMess={this.props.prenotazioni.errMess}/>
+                    prenotazioniErrMess={this.props.prenotazioni.errMess}
+                    postPrenotazione={this.props.postPrenotazione}/>
             )
         }
         return(
