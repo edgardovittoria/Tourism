@@ -60,7 +60,8 @@ public class PrenotazioneController {
 			prenotazione.setTuristaPrenotante(turista);
 			return new ResponseEntity<Prenotazione>(prenotazioneServiceImpl.storePrenotazione(prenotazione), HttpStatus.CREATED);
 		}else {
-			turistaServiceImpl.storeTurista(prenotazione.getTuristaPrenotante());
+			Turista turistaSalvato = turistaServiceImpl.storeTurista(prenotazione.getTuristaPrenotante());
+			prenotazione.setTuristaPrenotante(turistaSalvato);
 			return new ResponseEntity<Prenotazione>(prenotazioneServiceImpl.storePrenotazione(prenotazione), HttpStatus.CREATED);
 		}
 	}
@@ -69,6 +70,7 @@ public class PrenotazioneController {
 	public ResponseEntity<Prenotazione> updatePrenotazione(
 			@PathVariable("id") Integer id,
 			@RequestBody Prenotazione prenotazione){
+		
 		Prenotazione prenotazioneModificata = prenotazioneServiceImpl.updatePrenotazione(id, prenotazione);
 		return new ResponseEntity<Prenotazione>(prenotazioneModificata, HttpStatus.OK);
 	}
