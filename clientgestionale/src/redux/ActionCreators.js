@@ -6,6 +6,17 @@ export const addPrenotazione = (prenotazione) => ({
     payload: prenotazione
 });
 
+export const delPrenotazione = (id) => ({
+    type: ActionTypes.DEL_PRENOTAZIONE,
+    id: id
+})
+
+export const updPrenotazione = (id, prenotazione) => ({
+    type: ActionTypes.UPDATE_PRENOTAZIONE,
+    id: id,
+    payload: prenotazione
+})
+
 export const loadingPrenotazioni = () => ({
     type: ActionTypes.LOADING_PRENOTAZIONI
 })
@@ -42,50 +53,17 @@ export const fetchPrenotazioni = () => (dispatch) => {
         .catch(error => dispatch(failedPrenotazioni(error)))
 };
 
-export const postPrenotazione = (
-    numeroPartecipanti,
-    costoTotale,
-    pagata,
-    servizioFotografico,
-    turistaPrenotante,
-    postiDisponibili,
-    dataSvolgimentoAttivita,
-    dataDiPrenotazione,
-    attivitaPrenotata) => (dispatch) => {
-
-        const newPrenotazione = {
-            numeroPartecipanti: numeroPartecipanti,
-            costoTotale: costoTotale,
-            pagata: pagata,
-            servizioFotografico: servizioFotografico,
-            turistaPrenotante: {
-                id: turistaPrenotante.id,
-                nome: turistaPrenotante.nome,
-                recapitoTelefonico: turistaPrenotante.recapitoTelefonico
-            },
-            postiDisponibili: postiDisponibili,
-            dataSvolgimentoAttivita: dataSvolgimentoAttivita,
-            dataDiPrenotazione: dataDiPrenotazione,
-            attivitaPrenotata: {
-                id: attivitaPrenotata.id,
-                nome: attivitaPrenotata.nome,
-                costo: attivitaPrenotata.costo,
-                tipologia:attivitaPrenotata.tipologia,
-                image: attivitaPrenotata.image,
-                descrizione: attivitaPrenotata.descrizione,
-                luogo: attivitaPrenotata.luogo
-            }
-        };
+export const postPrenotazione = (prenotazione) => (dispatch) => {
 
         return fetch(baseUrl + 'prenotazioni', {
             method: 'POST',
-            body: JSON.stringify(newPrenotazione),
+            body: JSON.stringify(prenotazione),
             headers:{
                 'Content-type': 'Application/json'
             },
             credentials: 'same-origin'
         })
-        .then().then(response => {
+        .then(response => {
             if(response.ok){
                 return response;
             }
@@ -103,3 +81,52 @@ export const postPrenotazione = (
         .catch(error => dispatch(failedPrenotazioni(error)))
 
     }
+
+export const deletePrenotazione = (id) => (dispatch) => {
+    return fetch(baseUrl + 'prenotazioni/' + id, {method: 'DELETE'})
+    .then(response => {
+        if(response.ok){
+            return response;
+        }
+        else{
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(() => dispatch(delPrenotazione(id)))
+    .catch(error => dispatch(failedPrenotazioni(error)))
+}
+export const updatePrenotazione = (id, prenotazione) => (dispatch) => {
+    return fetch(baseUrl + 'prenotazioni/' + id, {
+        method: 'PUT',
+        body: JSON.stringify(prenotazione),
+        headers:{
+            'Content-type': 'Application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if(response.ok){
+            return response;
+        }
+        else{
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(response => dispatch(updPrenotazione(id,response)))
+    .catch(error => dispatch(failedPrenotazioni(error)))
+
+}
+
+
+

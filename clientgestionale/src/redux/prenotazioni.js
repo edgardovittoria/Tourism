@@ -9,6 +9,13 @@ export const Prenotazioni = (state = {
             var prenotazione = action.payload;
             return {...state, prenotazioni: state.prenotazioni.concat(prenotazione)}
 
+        case ActionTypes.DEL_PRENOTAZIONE:
+            return{...state, prenotazioni: state.prenotazioni.filter(prenotazione => prenotazione.id !== action.id)}
+
+        case ActionTypes.UPDATE_PRENOTAZIONE:
+            var prenotazioniUpdated = state.prenotazioni.filter(prenotazione => prenotazione.id !== action.id);
+            return{...state, prenotazioni: prenotazioniUpdated.concat(action.payload)}    
+        
         case ActionTypes.ADD_PRENOTAZIONI:
             return {...state, errMess: null, prenotazioni: action.payload}
 
