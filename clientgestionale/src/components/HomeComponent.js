@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component }from "react";
 import {
   Inject,
   ScheduleComponent,
@@ -10,13 +10,9 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import { editorWindowTemplate } from "../shared/editorWindowTemplate";
 import { Rafting } from "../shared/attivita";
-import { Button, ButtonComponent } from "@syncfusion/ej2-react-buttons";
 
-function Home(props) {
-  var data;
-
+const fetchPrenotazioni = (props, data) => {
   if (props.prenotazioni[0] != null) {
-    data = [];
     for (var i = 0; i < props.prenotazioni.length; i++) {
       var date = new Date(props.prenotazioni[i].dataSvolgimentoAttivita);
       var prenotazione = {
@@ -34,7 +30,40 @@ function Home(props) {
     }
   }
 
-  const onActionBegin = (evt) => {
+}
+
+class Home extends Component {
+  constructor(props){
+    super(props);
+    this.data = [];
+  }
+
+  componentDidMount(){
+    fetchPrenotazioni(this.props, this.data);
+  }
+
+  getTimeString(value) {
+    return this.instance.formatDate(value, { skeleton: 'hm' });
+  }
+
+  eventTemplate(props) {
+    return (
+      <div className="template-wrap" >
+      <div className="subject" >{props.Subject} N. {props.NumPartecipanti}</div>
+      <div className="numeroTelefonico" >{props.NumeroTelefonico}</div>
+      </div>
+    );
+  }
+
+  eventTemplateMonth(props){
+    return (
+      <div className="template-wrap" >
+      <div className="subject" >{props.Subject} N. {props.NumPartecipanti}</div>
+      </div>
+    );
+  }
+  
+  onActionBegin = (evt) => {
     var year;
     var month;
     var day;
@@ -79,12 +108,15 @@ function Home(props) {
         dataDiPrenotazione: dataSvolgimentoAttivita,
         attivitaPrenotata: Rafting,
       };
-      props.postPrenotazione(prenotazione);
-    } else if (evt.requestType === "eventRemove") {
-      console.log(evt.data[0].Id);
-      props.deletePrenotazione(evt.data[0].Id);
-    } else if (evt.requestType === "eventChange") {
-      var prenotazioneDaModificare = props.prenotazioni.filter(
+      this.props.postPrenotazione(prenotazione);
+    } 
+    
+    else if (evt.requestType === "eventRemove") {
+      this.props.deletePrenotazione(evt.data[0].Id);
+    } 
+    
+    else if (evt.requestType === "eventChange") {
+      var prenotazioneDaModificare = this.props.prenotazioni.filter(
         (prenotazione) => prenotazione.id === evt.changedRecords[0].Id
       )[0];
       year = evt.changedRecords[0].StartTime.getFullYear();
@@ -121,31 +153,34 @@ function Home(props) {
       prenotazioneDaModificare.dataSvolgimentoAttivita = dataSvolgimentoAttivita;
       prenotazioneDaModificare.dataDiPrenotazione = dataSvolgimentoAttivita;
 
-      props.updatePrenotazione(prenotazioneDaModificare.id, prenotazioneDaModificare);
+      this.props.updatePrenotazione(prenotazioneDaModificare.id, prenotazioneDaModificare);
     }
   };
 
-  return (
-    <div>
-      <ScheduleComponent
-        editorTemplate={editorWindowTemplate}
-        startHour="09:00"
-        endHour="16:00"
-        locale="it-CH"
-        eventSettings={{ dataSource: data }}
-        actionBegin={onActionBegin}
-        showQuickInfo={false}
-      >
-        <ViewsDirective>
-          <ViewDirective option="Day" displayName="OGGI">
-          </ViewDirective>
-          <ViewDirective option="Week" displayName="SETTIMANA" />
-          <ViewDirective option="Month" displayName="MESE" />
-        </ViewsDirective>
-        <Inject services={[Day, Week, Month]} />
-      </ScheduleComponent>
-    </div>
-  );
+  render(){
+    return (
+      <div>
+        <ScheduleComponent
+          editorTemplate={editorWindowTemplate}
+          startHour="09:00"
+          endHour="16:00"
+          locale="it-CH"
+          eventSettings={{ dataSource: this.data, template: this.eventTemplate.bind(this) }}
+          actionBegin={this.onActionBegin.bind(this)}
+          showQuickInfo={false}
+        >
+          <ViewsDirective>
+            <ViewDirective option="Day" displayName="OGGI">
+            </ViewDirective>
+            <ViewDirective option="Week" displayName="SETTIMANA"  />
+            <ViewDirective option="Month" displayName="MESE" eventTemplate={this.eventTemplateMonth.bind(this)} />
+          </ViewsDirective>
+          <Inject services={[Day, Week, Month]} />
+        </ScheduleComponent>
+      </div>
+    );
+  }
+  
 }
 
 export default Home;
