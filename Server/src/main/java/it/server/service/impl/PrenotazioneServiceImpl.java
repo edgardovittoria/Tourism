@@ -53,8 +53,10 @@ public class PrenotazioneServiceImpl implements PrenotazioneService{
 	}
 
 	@Override
-	public void deletePrenotazione(Integer id) {
+	public Prenotazione deletePrenotazione(Integer id) {
+		Prenotazione prenotazione = prenotazioneRepository.getOne(id);
 		prenotazioneRepository.deleteById(id);
+		return prenotazione;
 	}
 
 

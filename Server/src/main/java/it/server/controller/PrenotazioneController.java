@@ -23,6 +23,7 @@ import it.server.domain.Prenotazione;
 import it.server.domain.Turista;
 import it.server.service.impl.PrenotazioneServiceImpl;
 import it.server.service.impl.TuristaServiceImpl;
+import it.server.utility.WhatsAppMessageSender;
 
 @RestController
 @CrossOrigin
@@ -33,6 +34,8 @@ public class PrenotazioneController {
 	private PrenotazioneServiceImpl prenotazioneServiceImpl;
 	@Autowired
 	private TuristaServiceImpl turistaServiceImpl;
+	@Autowired
+	private WhatsAppMessageSender whatsAppMessageSender;
 	
 	@GetMapping
 	public ResponseEntity<List<Prenotazione>> getPrenotazioni(){
@@ -55,15 +58,17 @@ public class PrenotazioneController {
 			@RequestBody Prenotazione prenotazione){
 		
 		Turista turista = turistaServiceImpl.findTuristaByRecapitoTelefonico(prenotazione.getTuristaPrenotante().getRecapitoTelefonico());
-				
 		if(turista != null && turista.getNome().equals(prenotazione.getTuristaPrenotante().getNome())) {
 			prenotazione.setTuristaPrenotante(turista);
+			whatsAppMessageSender.sendMessage(prenotazione);
 			return new ResponseEntity<Prenotazione>(prenotazioneServiceImpl.storePrenotazione(prenotazione), HttpStatus.CREATED);
 		}else {
 			Turista turistaSalvato = turistaServiceImpl.storeTurista(prenotazione.getTuristaPrenotante());
 			prenotazione.setTuristaPrenotante(turistaSalvato);
+			whatsAppMessageSender.sendMessage(prenotazione);
 			return new ResponseEntity<Prenotazione>(prenotazioneServiceImpl.storePrenotazione(prenotazione), HttpStatus.CREATED);
 		}
+		
 	}
 	
 	@PutMapping("{id}")
@@ -77,7 +82,8 @@ public class PrenotazioneController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deletePrenotazione(@PathVariable("id") Integer id){
-		prenotazioneServiceImpl.deletePrenotazione(id);
+		Prenotazione prenotazione = prenotazioneServiceImpl.deletePrenotazione(id);
+		whatsAppMessageSender.sendMessageDelete(prenotazione);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		
 	}

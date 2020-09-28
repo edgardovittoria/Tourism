@@ -11,6 +11,6 @@ public interface PrenotazioneService {
 	List<Prenotazione> findPrenotazioneByDataSvolgimentoAttivita(LocalDateTime dataSvolgimentoAttivita);
 	Prenotazione storePrenotazione(Prenotazione prenotazione);
 	Prenotazione updatePrenotazione(Integer id, Prenotazione prenotazione);
-	void deletePrenotazione(Integer id);
+	Prenotazione deletePrenotazione(Integer id);
 
 }
