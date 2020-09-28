@@ -7,9 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.server.domain.Attivita;
 import it.server.domain.Vincolo;
-import it.server.repository.AttivitaRepository;
 import it.server.repository.VincoloRepository;
 import it.server.service.VincoloService;
 
