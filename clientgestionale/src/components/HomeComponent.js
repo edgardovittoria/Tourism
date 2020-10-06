@@ -1,186 +1,501 @@
-import React, { Component }from "react";
-import {
-  Inject,
-  ScheduleComponent,
-  Day,
-  Week,
-  Month,
-  ViewsDirective,
-  ViewDirective,
-} from "@syncfusion/ej2-react-schedule";
-import { editorWindowTemplate } from "../shared/editorWindowTemplate";
-import { Rafting } from "../shared/attivita";
+import React, { Component } from 'react';
+import Header from './HeaderComponent';
+import Footer from './FooterComponent';
+import MyCarousel from './MyCarouselComponent';
 
-const fetchPrenotazioni = (props, data) => {
-  if (props.prenotazioni[0] != null) {
-    for (var i = 0; i < props.prenotazioni.length; i++) {
-      var date = new Date(props.prenotazioni[i].dataSvolgimentoAttivita);
-      var prenotazione = {
-        Id: props.prenotazioni[i].id,
-        Subject: props.prenotazioni[i].turistaPrenotante.nome,
-        NumPartecipanti: props.prenotazioni[i].numeroPartecipanti,
-        NumeroTelefonico:
-          props.prenotazioni[i].turistaPrenotante.recapitoTelefonico,
-        StartTime: date,
-        EndTime: date,
-        pagata: props.prenotazioni[i].pagata,
-        servizioFotografico: props.prenotazioni[i].servizioFotografico
-      };
-      data.push(prenotazione);
-    }
-  }
-
-}
 
 class Home extends Component {
-  constructor(props){
-    super(props);
-    this.data = [];
-  }
-
-  componentDidMount(){
-    fetchPrenotazioni(this.props, this.data);
-  }
-
-  getTimeString(value) {
-    return this.instance.formatDate(value, { skeleton: 'hm' });
-  }
-
-  eventTemplate(props) {
-    return (
-      <div className="template-wrap" >
-      <div className="subject" >{props.Subject} N. {props.NumPartecipanti}</div>
-      <div className="numeroTelefonico" >{props.NumeroTelefonico}</div>
-      </div>
-    );
-  }
-
-  eventTemplateMonth(props){
-    return (
-      <div className="template-wrap" >
-      <div className="subject" >{props.Subject} N. {props.NumPartecipanti}</div>
-      </div>
-    );
-  }
-  
-  onActionBegin = (evt) => {
-    var year;
-    var month;
-    var day;
-    var localeDate;
-    var hours;
-    var minutes;
-    var localeTime;
-    var dataSvolgimentoAttivita;
-    if (evt.requestType === "eventCreate") {
-      year = evt.addedRecords[0].StartTime.getFullYear();
-      month = evt.addedRecords[0].StartTime.getMonth() + 1;
-      if (month < 10) {
-        month = "0" + month;
-      }
-      day = evt.addedRecords[0].StartTime.getDate();
-      if (day < 10) {
-        day = "0" + day;
-      }
-      localeDate = year + "-" + month + "-" + day;
-      hours = evt.addedRecords[0].StartTime.getHours();
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      minutes = evt.addedRecords[0].StartTime.getMinutes();
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      localeTime = hours + ":" + minutes;
-      dataSvolgimentoAttivita = localeDate + " " + localeTime;
-      var prenotazione = {
-        id: evt.addedRecords[0].Id,
-        numeroPartecipanti: evt.addedRecords[0].NumPartecipanti,
-        costoTotale: 35 * evt.addedRecords[0].NumPartecipanti,
-        pagata: evt.addedRecords[0].pagata,
-        servizioFotografico: evt.addedRecords[0].servizioFotografico,
-        turistaPrenotante: {
-          nome: evt.addedRecords[0].Subject,
-          recapitoTelefonico: evt.addedRecords[0].NumeroTelefonico,
-        },
-        postiDisponibili: 15,
-        dataSvolgimentoAttivita: dataSvolgimentoAttivita,
-        dataDiPrenotazione: dataSvolgimentoAttivita,
-        attivitaPrenotata: Rafting,
-      };
-      this.props.postPrenotazione(prenotazione);
-    } 
-    
-    else if (evt.requestType === "eventRemove") {
-      this.props.deletePrenotazione(evt.data[0].Id);
-    } 
-    
-    else if (evt.requestType === "eventChange") {
-      var prenotazioneDaModificare = this.props.prenotazioni.filter(
-        (prenotazione) => prenotazione.id === evt.changedRecords[0].Id
-      )[0];
-      year = evt.changedRecords[0].StartTime.getFullYear();
-      month = evt.changedRecords[0].StartTime.getMonth() + 1;
-      if (month < 10) {
-        month = "0" + month;
-      }
-      day = evt.changedRecords[0].StartTime.getDate();
-      if (day < 10) {
-        day = "0" + day;
-      }
-      localeDate = year + "-" + month + "-" + day;
-      hours = evt.changedRecords[0].StartTime.getHours();
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      minutes = evt.changedRecords[0].StartTime.getMinutes();
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      localeTime = hours + ":" + minutes;
-      dataSvolgimentoAttivita = localeDate + " " + localeTime;
-
-      prenotazioneDaModificare.id = evt.changedRecords[0].Id;
-      prenotazioneDaModificare.numeroPartecipanti = evt.changedRecords[0].NumPartecipanti;
-      prenotazioneDaModificare.costoTotale = 35 * evt.changedRecords[0].NumPartecipanti;
-      prenotazioneDaModificare.pagata = evt.changedRecords[0].pagata;
-      prenotazioneDaModificare.servizioFotografico = evt.changedRecords[0].servizioFotografico;
-      prenotazioneDaModificare.turistaPrenotante = {
-        id: prenotazioneDaModificare.turistaPrenotante.id,
-        nome: evt.changedRecords[0].Subject,
-        recapitoTelefonico: evt.changedRecords[0].NumeroTelefonico,
-      };
-      prenotazioneDaModificare.dataSvolgimentoAttivita = dataSvolgimentoAttivita;
-      prenotazioneDaModificare.dataDiPrenotazione = dataSvolgimentoAttivita;
-
-      this.props.updatePrenotazione(prenotazioneDaModificare.id, prenotazioneDaModificare);
+    constructor(props) {
+        super(props);
     }
-  };
 
-  render(){
-    return (
-      <div>
-        <ScheduleComponent
-          editorTemplate={editorWindowTemplate}
-          startHour="09:00"
-          endHour="16:00"
-          locale="it-CH"
-          eventSettings={{ dataSource: this.data, template: this.eventTemplate.bind(this) }}
-          actionBegin={this.onActionBegin.bind(this)}
-          showQuickInfo={false}
-        >
-          <ViewsDirective>
-            <ViewDirective option="Day" displayName="OGGI">
-            </ViewDirective>
-            <ViewDirective option="Week" displayName="SETTIMANA"  />
-            <ViewDirective option="Month" displayName="MESE" eventTemplate={this.eventTemplateMonth.bind(this)} />
-          </ViewsDirective>
-          <Inject services={[Day, Week, Month]} />
-        </ScheduleComponent>
-      </div>
-    );
-  }
-  
+    render() {
+        return (
+            <div>
+                <Header />
+                <MyCarousel />
+                <div className="where_togo_area">
+                    <div className="container">
+                        <div className="row align-items-center">
+                            <div className="col-lg-3">
+                                <div className="form_area">
+                                    <h3>Cerca le attività</h3>
+                                </div>
+                            </div>
+                            <div className="col-lg-8">
+                                <div className="search_wrap">
+                                    <form className="search_form" action="#">
+                                        <div className="input_field">
+                                            <input type="text" placeholder="Località" />
+                                        </div>
+                                        <div className="input_field">
+                                            <select className="nice-select">
+                                                <option data-display="Tipologia">Adrenalina</option>
+                                                <option value="1">Some option</option>
+                                                <option value="2">Another option</option>
+                                            </select>
+                                        </div>
+                                        <div className="search_btn">
+                                            <button className="boxed-btn4 " type="submit" >Search</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="popular_destination_area">
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-6">
+                                <div className="section_title text-center mb_70">
+                                    <h3>Popular Destination</h3>
+                                    <p>Suffered alteration in some form, by injected humour or good day randomised booth anim 8-bit hella wolf moon beard words.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/1.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">Italy <a href="http://localhost:3000/attivita">  07 Places</a> </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/2.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">Brazil <a href="http://localhost:3000/attivita">  03 Places</a> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/3.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">America <a href="http://localhost:3000/attivita">  10 Places</a> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/4.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">Nepal <a href="http://localhost:3000/attivita">  02 Places</a> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/5.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">Maldives <a href="http://localhost:3000/attivita">  02 Places</a> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_destination">
+                                    <div className="thumb">
+                                        <img src="./assets/img/destination/6.png" alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <p className="d-flex align-items-center">Indonesia <a href="http://localhost:3000/attivita">  05 Places</a> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="newletter_area overlay">
+                    <div className="container">
+                        <div className="row justify-content-center align-items-center">
+                            <div className="col-lg-10">
+                                <div className="row align-items-center">
+                                    <div className="col-lg-5">
+                                        <div className="newsletter_text">
+                                            <h4>Subscribe Our Newsletter</h4>
+                                            <p>Subscribe newsletter to get offers and about
+                                                new places to discover.</p>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-7">
+                                        <div className="mail_form">
+                                            <div className="row no-gutters">
+                                                <div className="col-lg-9 col-md-8">
+                                                    <div className="newsletter_field">
+                                                        <input type="email" placeholder="Your mail" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-3 col-md-4">
+                                                    <div className="newsletter_btn">
+                                                        <button className="boxed-btn4 " type="submit" >Subscribe</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="popular_places_area">
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-6">
+                                <div className="section_title text-center mb_70">
+                                    <h3>Popular Places</h3>
+                                    <p>Suffered alteration in some form, by injected humour or good day randomised booth anim 8-bit hella wolf moon beard words.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/1.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>California</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/2.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>Korola Megna</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/3.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>London</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/4.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>Miami Beach</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/5.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>California</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_place">
+                                    <div className="thumb">
+                                        <img src="./assets/img/place/6.png" alt="" />
+                                        <a href="#" className="prise">$500</a>
+                                    </div>
+                                    <div className="place_info">
+                                        <a href="destination_details.html"><h3>Saintmartine Iceland</h3></a>
+                                        <p>United State of America</p>
+                                        <div className="rating_days d-flex justify-content-between">
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
+                                                <a href="#">(20 Review)</a>
+                                            </span>
+                                            <div className="days">
+                                                <i className="fa fa-clock-o"></i>
+                                                <a href="#">5 Days</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="more_place_btn text-center">
+                                    <a className="boxed-btn4" href="#">More Places</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="travel_variation_area">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_travel text-center">
+                                    <div className="icon">
+                                        <img src="./assets/img/svg_icon/1.svg" alt="" />
+                                    </div>
+                                    <h3>Comfortable Journey</h3>
+                                    <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_travel text-center">
+                                    <div className="icon">
+                                        <img src="./assets/img/svg_icon/2.svg" alt="" />
+                                    </div>
+                                    <h3>Luxuries Hotel</h3>
+                                    <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_travel text-center">
+                                    <div className="icon">
+                                        <img src="./assets/img/svg_icon/3.svg" alt="" />
+                                    </div>
+                                    <h3>Travel Guide</h3>
+                                    <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="testimonial_area">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xl-12">
+                                <div className="testmonial_active owl-carousel">
+                                    <div className="single_carousel">
+                                        <div className="row justify-content-center">
+                                            <div className="col-lg-8">
+                                                <div className="single_testmonial text-center">
+                                                    <div className="author_thumb">
+                                                        <img src="./assets/img/testmonial/author.png" alt="" />
+                                                    </div>
+                                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                                                    <div className="testmonial_author">
+                                                        <h3>- Micky Mouse</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="single_carousel">
+                                        <div className="row justify-content-center">
+                                            <div className="col-lg-8">
+                                                <div className="single_testmonial text-center">
+                                                    <div className="author_thumb">
+                                                        <img src="./assets/img/testmonial/author.png" alt="" />
+                                                    </div>
+                                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                                                    <div className="testmonial_author">
+                                                        <h3>- Tom Mouse</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="single_carousel">
+                                        <div className="row justify-content-center">
+                                            <div className="col-lg-8">
+                                                <div className="single_testmonial text-center">
+                                                    <div className="author_thumb">
+                                                        <img src="./assets/img/testmonial/author.png" alt="" />
+                                                    </div>
+                                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                                                    <div className="testmonial_author">
+                                                        <h3>- Jerry Mouse</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="recent_trip_area">
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-6">
+                                <div className="section_title text-center mb_70">
+                                    <h3>Recent Trips</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_trip">
+                                    <div className="thumb">
+                                        <img src="./assets/img/trip/1.png" alt="" />
+                                    </div>
+                                    <div className="info">
+                                        <div className="date">
+                                            <span>Oct 12, 2019</span>
+                                        </div>
+                                        <a href="#">
+                                            <h3>Journeys Are Best Measured In
+                                                New Friends</h3>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_trip">
+                                    <div className="thumb">
+                                        <img src="./assets/img/trip/2.png" alt="" />
+                                    </div>
+                                    <div className="info">
+                                        <div className="date">
+                                            <span>Oct 12, 2019</span>
+                                        </div>
+                                        <a href="#">
+                                            <h3>Journeys Are Best Measured In
+                                                New Friends</h3>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6">
+                                <div className="single_trip">
+                                    <div className="thumb">
+                                        <img src="./assets/img/trip/3.png" alt="" />
+                                    </div>
+                                    <div className="info">
+                                        <div className="date">
+                                            <span>Oct 12, 2019</span>
+                                        </div>
+                                        <a href="#">
+                                            <h3>Journeys Are Best Measured In
+                                                New Friends</h3>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <Footer />
+
+            </div>
+        )
+    }
 }
 
 export default Home;

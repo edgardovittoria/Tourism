@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import Admin from './AdminComponent';
 import Home from './HomeComponent';
+import MyHome from './MyHomeComponent';
+import DettagliAtiivita from './DettagliAtiivitaComponent';
 import { deletePrenotazione, fetchPrenotazioni, postPrenotazione, updatePrenotazione } from '../redux/ActionCreators';
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
@@ -39,10 +42,12 @@ class Main extends Component {
         this.props.fetchPrenotazioni();
     }
 
+    com
+
     render() {
-        const HomePage = () => {
+        const AdminPage = () => {
             return(
-                <Home 
+                <Admin 
                     prenotazioni={this.props.prenotazioni.prenotazioni}
                     loadingPrenotazioni={this.props.prenotazioni.isLoading}
                     prenotazioniErrMess={this.props.prenotazioni.errMess}
@@ -51,12 +56,33 @@ class Main extends Component {
                     updatePrenotazione={this.props.updatePrenotazione}/>
             )
         }
+        const HomePage = () => {
+            return(
+                <Home />
+            )
+        }
+
+        const MyHomePage = () => {
+            return(
+                <MyHome />
+            )
+        }
+
+        const AttivitaWithId = ({match}) => {
+            return(
+                <DettagliAtiivita />
+            )
+        }
+
         return(
             <div className="App">
-                <Switch>
-                    <Route path="/home" component={HomePage} />
-                    <Redirect to="/home" />
-                </Switch>
+                    <Switch>
+                        <Route exact path="/admin" component={AdminPage} /> 
+                        <Route path="/home" component={MyHomePage} />
+                        <Route path="/attivita" component={AttivitaWithId} />
+                        <Redirect to="/home" />                   
+                    </Switch>
+                    
             </div>
         )
     };
