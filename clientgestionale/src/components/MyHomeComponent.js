@@ -18,7 +18,9 @@ class MyHome extends Component {
                 <MyCarousel />
                 <FormRicerca />
                 <AttivitaNeiPaesi/>
-                <AttivitaPopolari/>
+                <AttivitaPopolari attivita={this.props.attivita.filter((attivita) => attivita.homePage === true)}
+                    isLoading={this.props.loadingAttivita}
+                    errMess={this.props.attivitaErrMess}/>
                 <Footer/>
             </div>
 

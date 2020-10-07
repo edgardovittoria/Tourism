@@ -82,7 +82,7 @@ class MyHeader extends Component {
             <Navbar light expand="md">
               <NavbarBrand className="mr-auto" href="/">
                 <img
-                  src="./assets/img/logo.jpg"
+                  src="/assets/img/logo.jpg"
                   height="100"
                   width="90"
                   alt="Be-Tour"

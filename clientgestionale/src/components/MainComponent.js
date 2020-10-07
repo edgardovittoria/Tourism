@@ -3,7 +3,7 @@ import Admin from './AdminComponent';
 import Home from './HomeComponent';
 import MyHome from './MyHomeComponent';
 import DettagliAtiivita from './DettagliAtiivitaComponent';
-import { deletePrenotazione, fetchPrenotazioni, postPrenotazione, updatePrenotazione } from '../redux/ActionCreators';
+import { deletePrenotazione, fetchPrenotazioni, postPrenotazione, updatePrenotazione, fetchAttivita } from '../redux/ActionCreators';
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -22,7 +22,8 @@ L10n.load({
 
 const mapStateToProps = (state) => {
     return {
-        prenotazioni: state.prenotazioni
+        prenotazioni: state.prenotazioni,
+        attivita: state.attivita
     };
 };
 
@@ -30,7 +31,8 @@ const mapDispatchToProps = (dispatch) => ({
     fetchPrenotazioni: () => {dispatch(fetchPrenotazioni())},
     postPrenotazione: (prenotazione) => { dispatch(postPrenotazione(prenotazione))},
     deletePrenotazione: (id) => {dispatch(deletePrenotazione(id))},
-    updatePrenotazione: (id, prenotazione) => {dispatch(updatePrenotazione(id, prenotazione))}
+    updatePrenotazione: (id, prenotazione) => {dispatch(updatePrenotazione(id, prenotazione))},
+    fetchAttivita: () => {dispatch(fetchAttivita())}
 });
 
 class Main extends Component {
@@ -40,9 +42,9 @@ class Main extends Component {
 
     componentDidMount() {
         this.props.fetchPrenotazioni();
+        this.props.fetchAttivita();
     }
 
-    com
 
     render() {
         const AdminPage = () => {
@@ -64,13 +66,18 @@ class Main extends Component {
 
         const MyHomePage = () => {
             return(
-                <MyHome />
+                <MyHome attivita={this.props.attivita.attivita}
+                    loadingAttivita={this.props.attivita.isLoading}
+                    attivitaErrMess={this.props.attivita.errMess}/>
             )
         }
 
         const AttivitaWithId = ({match}) => {
             return(
-                <DettagliAtiivita />
+                <DettagliAtiivita attivita={this.props.attivita.attivita.filter((attivita) => attivita.id === parseInt(match.params.idAttivita, 10))[0]}
+                    isLoading={this.props.attivita.isLoading}
+                    errMess={this.props.attivita.errMess}
+                    postPrenotazione={this.props.postPrenotazione}/>
             )
         }
 
@@ -79,7 +86,7 @@ class Main extends Component {
                     <Switch>
                         <Route exact path="/admin" component={AdminPage} /> 
                         <Route path="/home" component={MyHomePage} />
-                        <Route path="/attivita" component={AttivitaWithId} />
+                        <Route path="/attivita/:idAttivita" component={AttivitaWithId} />
                         <Redirect to="/home" />                   
                     </Switch>
                     

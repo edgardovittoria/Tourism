@@ -128,5 +128,41 @@ export const updatePrenotazione = (id, prenotazione) => (dispatch) => {
 
 }
 
+export const loadingAttivita = () => ({
+    type: ActionTypes.LOADING_ATTIVITA
+})
+
+export const failedAttivita = (errmess) => ({
+    type: ActionTypes.FAILED_ATTIVITA,
+    payload: errmess
+})
+
+export const addAttivita = (attivita) => ({
+    type: ActionTypes.ADD_ATTIVITA,
+    payload: attivita
+})
+
+
+export const fetchAttivita = () => (dispatch) => {
+    dispatch(loadingAttivita(true));
+
+    return fetch(baseUrl + 'attivita')
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+            else{
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+        })
+        .then(response => response.json())
+        .then(attivita => dispatch(addAttivita(attivita)))
+        .catch(error => dispatch(failedAttivita(error)))
+};
 
 

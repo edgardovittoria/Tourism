@@ -55,8 +55,45 @@ class FormPrenotazione extends Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(values) {
+    var year = this.state.selectedDate.getFullYear();
+    var month = this.state.selectedDate.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    var day = this.state.selectedDate.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    var localeDate = year + "-" + month + "-" + day;
+    var hours = this.state.selectedDate.getHours();
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    var minutes = this.state.selectedDate.getMinutes();
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    var localeTime = hours + ":" + minutes;
+    var dataSvolgimentoAttivita = localeDate + " " + localeTime;
+    var prenotazione = {
+      numeroPartecipanti: values.numeroPartecipanti,
+      costoTotale: 35 * values.numeroPartecipanti,
+      pagata: true,
+      servizioFotografico: false,
+      turistaPrenotante: {
+        nome: values.turistaPrenotante,
+        recapitoTelefonico: values.numeroTelefonico,
+      },
+      postiDisponibili: 15,
+      dataSvolgimentoAttivita: dataSvolgimentoAttivita,
+      dataDiPrenotazione: dataSvolgimentoAttivita,
+      attivitaPrenotata: this.props.attivita,
+    };
+    console.log(prenotazione);
+    this.props.postPrenotazione(prenotazione);
     this.toggleModal();
+
   }
 
   handleChange(values) {
@@ -66,6 +103,7 @@ class FormPrenotazione extends Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <div>
         <button onClick={this.toggleModal} className="boxed-btn3">
