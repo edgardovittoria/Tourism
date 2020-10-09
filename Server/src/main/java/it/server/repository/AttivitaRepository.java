@@ -10,6 +10,7 @@ public interface AttivitaRepository extends JpaRepository<Attivita, Integer>{
 
 	List<Attivita> findByTipologia(String tipologia);
 	List<Attivita> findByLuogo(String luogo);
+	List<Attivita> findByHomePage(Boolean homePage);
 	
 	
 }

@@ -29,6 +29,8 @@ public class Attivita {
 	private String descrizione;
 	@Column
 	private String luogo;
+	@Column
+	private Boolean homePage;
 
 	public Attivita() {
 
@@ -89,6 +91,16 @@ public class Attivita {
 	public void setLuogo(String luogo) {
 		this.luogo = luogo;
 	}
+
+	public Boolean getHomePage() {
+		return homePage;
+	}
+
+	public void setHomePage(Boolean homePage) {
+		this.homePage = homePage;
+	}
+
+	
 
 	
 }

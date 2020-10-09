@@ -81,7 +81,7 @@ public class PrenotazioneController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deletePrenotazione(@PathVariable("id") Integer id){
-		//Prenotazione prenotazione = prenotazioneServiceImpl.deletePrenotazione(id);
+		Prenotazione prenotazione = prenotazioneServiceImpl.deletePrenotazione(id);
 		//whatsAppMessageSender.sendMessageDelete(prenotazione);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		

@@ -1,6 +1,8 @@
 package it.server.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,8 +39,11 @@ public class Prenotazione {
 	@Column
 	private Integer postiDisponibili;
 	@Column
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	private LocalDateTime dataSvolgimentoAttivita;
+	@JsonFormat(pattern="yyyy-MM-dd")
+	private LocalDate dataSvolgimentoAttivita;
+	@Column
+	@JsonFormat(pattern="HH:mm")
+	private LocalTime oraSvolgimentoAttivita;
 	@Column
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private LocalDateTime dataDiPrenotazione;
@@ -113,12 +118,20 @@ public class Prenotazione {
 		this.postiDisponibili = postiDisponibili;
 	}
 
-	public LocalDateTime getDataSvolgimentoAttivita() {
+	public LocalDate getDataSvolgimentoAttivita() {
 		return dataSvolgimentoAttivita;
 	}
 
-	public void setDataSvolgimentoAttivita(LocalDateTime dataSvolgimentoAttivita) {
+	public void setDataSvolgimentoAttivita(LocalDate dataSvolgimentoAttivita) {
 		this.dataSvolgimentoAttivita = dataSvolgimentoAttivita;
+	}
+
+	public LocalTime getOraSvolgimentoAttivita() {
+		return oraSvolgimentoAttivita;
+	}
+
+	public void setOraSvolgimentoAttivita(LocalTime oraSvolgimentoAttivita) {
+		this.oraSvolgimentoAttivita = oraSvolgimentoAttivita;
 	}
 
 	public LocalDateTime getDataDiPrenotazione() {
@@ -136,4 +149,5 @@ public class Prenotazione {
 	public void setAttivitaPrenotata(Attivita attivitaPrenotata) {
 		this.attivitaPrenotata = attivitaPrenotata;
 	}
+
 }

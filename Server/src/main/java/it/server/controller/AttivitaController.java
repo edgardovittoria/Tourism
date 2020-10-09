@@ -30,6 +30,11 @@ public class AttivitaController {
 	public ResponseEntity<Attivita> storeAttivita(@RequestBody Attivita attivita){
 		return new ResponseEntity<Attivita>(attivitaServiceImpl.storeAttivita(attivita), HttpStatus.CREATED);
 	}
+
+	@GetMapping("/home")
+	public ResponseEntity<List<Attivita>> getAttivitaHome(){
+		return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAttivitaHome(), HttpStatus.OK);
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<Attivita>> getAttivitaByTipologia(
@@ -40,7 +45,7 @@ public class AttivitaController {
 		}else if(tipologia==null && luogo!=null) {
 			return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAttivitaByLuogo(luogo), HttpStatus.OK);
 		}else {
-			return new ResponseEntity<List<Attivita>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAllAttivita(), HttpStatus.OK);
 		}
 	}
 	

@@ -24,6 +24,11 @@ public class AttivitaServiceImpl implements AttivitaService{
 	}
 
 	@Override
+	public List<Attivita> findAttivitaHome(){
+		return attivitaRepository.findByHomePage(true);
+	}
+
+	@Override
 	public List<Attivita> findAttivitaByTipologia(String tipologia) {
 		return attivitaRepository.findByTipologia(tipologia);
 	}
