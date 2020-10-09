@@ -9,12 +9,13 @@ import {
   ViewDirective,
 } from "@syncfusion/ej2-react-schedule";
 import { editorWindowTemplate } from "../shared/editorWindowTemplate";
+import { dateToString, timeToString} from '../utility/DateToString';
 import { Rafting } from "../shared/attivita";
 
 const fillCalendar = (props, data) => {
   if (props.prenotazioni[0] != null) {
     for (var i = 0; i < props.prenotazioni.length; i++) {
-      var date = new Date(props.prenotazioni[i].dataSvolgimentoAttivita);
+      var date = new Date(props.prenotazioni[i].dataSvolgimentoAttivita+" "+props.prenotazioni[i].oraSvolgimentoAttivita);
       var prenotazione = {
         Id: props.prenotazioni[i].id,
         Subject: props.prenotazioni[i].turistaPrenotante.nome,
@@ -68,35 +69,15 @@ class Admin extends Component {
   }
 
   onActionBegin = (evt) => {
-    var year;
-    var month;
-    var day;
-    var localeDate;
-    var hours;
-    var minutes;
-    var localeTime;
     var dataSvolgimentoAttivita;
+    var oraSvolgimentoAttivita;
+    var dataDiPrenotazione;
+    var oraDiPrenotazione
     if (evt.requestType === "eventCreate") {
-      year = evt.addedRecords[0].StartTime.getFullYear();
-      month = evt.addedRecords[0].StartTime.getMonth() + 1;
-      if (month < 10) {
-        month = "0" + month;
-      }
-      day = evt.addedRecords[0].StartTime.getDate();
-      if (day < 10) {
-        day = "0" + day;
-      }
-      localeDate = year + "-" + month + "-" + day;
-      hours = evt.addedRecords[0].StartTime.getHours();
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      minutes = evt.addedRecords[0].StartTime.getMinutes();
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      localeTime = hours + ":" + minutes;
-      dataSvolgimentoAttivita = localeDate + " " + localeTime;
+      dataSvolgimentoAttivita = dateToString(evt.addedRecords[0].StartTime);
+      oraSvolgimentoAttivita = timeToString(evt.addedRecords[0].StartTime);
+      dataDiPrenotazione = dateToString(new Date());
+      oraDiPrenotazione = timeToString(new Date());
       var prenotazione = {
         id: evt.addedRecords[0].Id,
         numeroPartecipanti: evt.addedRecords[0].NumPartecipanti,
@@ -109,7 +90,8 @@ class Admin extends Component {
         },
         postiDisponibili: 15,
         dataSvolgimentoAttivita: dataSvolgimentoAttivita,
-        dataDiPrenotazione: dataSvolgimentoAttivita,
+        oraSvolgimentoAttivita: oraSvolgimentoAttivita,
+        dataDiPrenotazione: dataDiPrenotazione+" "+oraDiPrenotazione,
         attivitaPrenotata: Rafting,
       };
       this.props.postPrenotazione(prenotazione);
@@ -123,26 +105,9 @@ class Admin extends Component {
       var prenotazioneDaModificare = this.props.prenotazioni.filter(
         (prenotazione) => prenotazione.id === evt.changedRecords[0].Id
       )[0];
-      year = evt.changedRecords[0].StartTime.getFullYear();
-      month = evt.changedRecords[0].StartTime.getMonth() + 1;
-      if (month < 10) {
-        month = "0" + month;
-      }
-      day = evt.changedRecords[0].StartTime.getDate();
-      if (day < 10) {
-        day = "0" + day;
-      }
-      localeDate = year + "-" + month + "-" + day;
-      hours = evt.changedRecords[0].StartTime.getHours();
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      minutes = evt.changedRecords[0].StartTime.getMinutes();
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      localeTime = hours + ":" + minutes;
-      dataSvolgimentoAttivita = localeDate + " " + localeTime;
+
+      dataSvolgimentoAttivita = dateToString(evt.changedRecords[0].StartTime);
+      oraSvolgimentoAttivita = timeToString(evt.changedRecords[0].StartTime);
 
       prenotazioneDaModificare.id = evt.changedRecords[0].Id;
       prenotazioneDaModificare.numeroPartecipanti = evt.changedRecords[0].NumPartecipanti;
@@ -155,7 +120,8 @@ class Admin extends Component {
         recapitoTelefonico: evt.changedRecords[0].NumeroTelefonico,
       };
       prenotazioneDaModificare.dataSvolgimentoAttivita = dataSvolgimentoAttivita;
-      prenotazioneDaModificare.dataDiPrenotazione = dataSvolgimentoAttivita;
+      prenotazioneDaModificare.oraSvolgimentoAttivita = oraSvolgimentoAttivita;
+      prenotazioneDaModificare.dataDiPrenotazione = prenotazioneDaModificare.dataDiPrenotazione;
 
       this.props.updatePrenotazione(prenotazioneDaModificare.id, prenotazioneDaModificare);
     }
@@ -167,7 +133,7 @@ class Admin extends Component {
         <ScheduleComponent
           editorTemplate={editorWindowTemplate}
           startHour="09:00"
-          endHour="16:00"
+          endHour="17:00"
           locale="it-CH"
           eventSettings={{ dataSource: this.data, template: this.eventTemplate.bind(this) }}
           actionBegin={this.onActionBegin.bind(this)}

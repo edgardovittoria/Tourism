@@ -38,6 +38,7 @@ class DettagliAttivita extends Component {
                         <div class="destination_text text-center">
                             <h3>Torrentsimo Palena</h3>
                             <FormPrenotazione attivita={this.props.attivita}
+                                prenotazioni={this.props.prenotazioni.filter((prenotazione) => prenotazione.attivitaPrenotata.id === this.props.attivita.id)}
                                 postPrenotazione={this.props.postPrenotazione}/>
                         </div>
                     </div>
@@ -64,6 +65,7 @@ class DettagliAttivita extends Component {
                                         </div>
                                     </div>
                                     <FormPrenotazione attivita={this.props.attivita}
+                                        prenotazioni={this.props.prenotazioni.filter((prenotazione) => prenotazione.attivitaPrenotata.id === this.props.attivita.id)}
                                         postPrenotazione={this.props.postPrenotazione}/>
                                 </div>
                             </div>

@@ -75,6 +75,7 @@ class Main extends Component {
         const AttivitaWithId = ({match}) => {
             return(
                 <DettagliAtiivita attivita={this.props.attivita.attivita.filter((attivita) => attivita.id === parseInt(match.params.idAttivita, 10))[0]}
+                    prenotazioni={this.props.prenotazioni.prenotazioni}
                     isLoading={this.props.attivita.isLoading}
                     errMess={this.props.attivita.errMess}
                     postPrenotazione={this.props.postPrenotazione}/>

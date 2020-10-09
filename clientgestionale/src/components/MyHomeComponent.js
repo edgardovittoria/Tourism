@@ -19,6 +19,7 @@ class MyHome extends Component {
                 <FormRicerca />
                 <AttivitaNeiPaesi/>
                 <AttivitaPopolari attivita={this.props.attivita.filter((attivita) => attivita.homePage === true)}
+                    prenotazioni={this.props.prenotazioni}
                     isLoading={this.props.loadingAttivita}
                     errMess={this.props.attivitaErrMess}/>
                 <Footer/>

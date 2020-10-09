@@ -16,7 +16,7 @@ class Footer extends Component {
                                     <div className="footer_logo">
                                         <a href="#">
                                             <img
-                                                src="./assets/img/logo.jpg"
+                                                src="/assets/img/logo.jpg"
                                                 height="90"
                                                 width="80"
                                                 alt="Be-Tour"
@@ -97,32 +97,32 @@ class Footer extends Component {
                                     <div className="instagram_feed">
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/1.png" alt="" />
+                                                <img src="/assets/img/instagram/1.png" alt="" />
                                             </a>
                                         </div>
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/2.png" alt="" />
+                                                <img src="/assets/img/instagram/2.png" alt="" />
                                             </a>
                                         </div>
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/3.png" alt="" />
+                                                <img src="/assets/img/instagram/3.png" alt="" />
                                             </a>
                                         </div>
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/4.png" alt="" />
+                                                <img src="/assets/img/instagram/4.png" alt="" />
                                             </a>
                                         </div>
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/5.png" alt="" />
+                                                <img src="/assets/img/instagram/5.png" alt="" />
                                             </a>
                                         </div>
                                         <div className="single_insta">
                                             <a href="#">
-                                                <img src="./assets/img/instagram/6.png" alt="" />
+                                                <img src="/assets/img/instagram/6.png" alt="" />
                                             </a>
                                         </div>
                                     </div>
