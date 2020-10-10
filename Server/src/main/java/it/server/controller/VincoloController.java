@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.server.domain.Vincolo;
-import it.server.service.impl.VincoloServiceImpl;
+import it.server.service.VincoloService;
 
 @RestController
 @CrossOrigin
@@ -24,22 +24,22 @@ import it.server.service.impl.VincoloServiceImpl;
 public class VincoloController {
 
 	@Autowired
-	private VincoloServiceImpl vincoloServiceImpl;
+	private VincoloService vincoloService;
 	
 	@PostMapping
 	public ResponseEntity<Vincolo> storeVincolo(@RequestBody Vincolo vincolo){
-		return new ResponseEntity<Vincolo>(vincoloServiceImpl.storeVincolo(vincolo), HttpStatus.CREATED);
+		return new ResponseEntity<Vincolo>(vincoloService.storeVincolo(vincolo), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Vincolo>> getVincoliByIdAttivita(
 			@RequestParam("id_attivita") Integer id_attivita){
-		return new ResponseEntity<List<Vincolo>>(vincoloServiceImpl.getVincoliByAttivita(id_attivita), HttpStatus.OK);
+		return new ResponseEntity<List<Vincolo>>(vincoloService.getVincoliByAttivita(id_attivita), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deleteVincolo(@PathVariable("id") Integer id){
-		vincoloServiceImpl.deleteVincolo(id);
+		vincoloService.deleteVincolo(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 }

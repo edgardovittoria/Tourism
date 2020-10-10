@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.server.domain.Attivita;
-import it.server.service.impl.AttivitaServiceImpl;
+import it.server.service.AttivitaService;
 
 @RestController
 @CrossOrigin
@@ -24,16 +24,16 @@ import it.server.service.impl.AttivitaServiceImpl;
 public class AttivitaController {
 	
 	@Autowired
-	private AttivitaServiceImpl attivitaServiceImpl;
+	private AttivitaService attivitaService;
 	
 	@PostMapping
 	public ResponseEntity<Attivita> storeAttivita(@RequestBody Attivita attivita){
-		return new ResponseEntity<Attivita>(attivitaServiceImpl.storeAttivita(attivita), HttpStatus.CREATED);
+		return new ResponseEntity<Attivita>(attivitaService.storeAttivita(attivita), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/home")
 	public ResponseEntity<List<Attivita>> getAttivitaHome(){
-		return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAttivitaHome(), HttpStatus.OK);
+		return new ResponseEntity<List<Attivita>>(attivitaService.findAttivitaHome(), HttpStatus.OK);
 	}
 	
 	@GetMapping
@@ -41,18 +41,18 @@ public class AttivitaController {
 			@RequestParam(required = false, name = "tipologia") String tipologia, 
 			@RequestParam(required = false, name = "luogo") String luogo){
 		if(tipologia!=null && luogo==null) {
-			return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAttivitaByTipologia(tipologia), HttpStatus.OK);			
+			return new ResponseEntity<List<Attivita>>(attivitaService.findAttivitaByTipologia(tipologia), HttpStatus.OK);			
 		}else if(tipologia==null && luogo!=null) {
-			return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAttivitaByLuogo(luogo), HttpStatus.OK);
+			return new ResponseEntity<List<Attivita>>(attivitaService.findAttivitaByLuogo(luogo), HttpStatus.OK);
 		}else {
-			return new ResponseEntity<List<Attivita>>(attivitaServiceImpl.findAllAttivita(), HttpStatus.OK);
+			return new ResponseEntity<List<Attivita>>(attivitaService.findAllAttivita(), HttpStatus.OK);
 		}
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deleteAttivita(
 			@PathVariable("id") Integer id){
-		attivitaServiceImpl.deleteAttivitaById(id);
+		attivitaService.deleteAttivitaById(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	

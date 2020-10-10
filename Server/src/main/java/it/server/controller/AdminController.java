@@ -26,8 +26,8 @@ import it.server.service.TuristaService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/prenotazioni")
-public class PrenotazioneController {
+@RequestMapping("/admin/prenotazioni")
+public class AdminController {
 
 	@Autowired
 	private PrenotazioneService prenotazioneService;
@@ -69,6 +69,21 @@ public class PrenotazioneController {
 		}
 		
 	}
-
 	
+	@PutMapping("{id}")
+	public ResponseEntity<Prenotazione> updatePrenotazione(
+			@PathVariable("id") Integer id,
+			@RequestBody Prenotazione prenotazione){
+		
+		Prenotazione prenotazioneModificata = prenotazioneService.updatePrenotazione(id, prenotazione);
+		return new ResponseEntity<Prenotazione>(prenotazioneModificata, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("{id}")
+	public ResponseEntity<Void> deletePrenotazione(@PathVariable("id") Integer id){
+		Prenotazione prenotazione = prenotazioneService.deletePrenotazione(id);
+		//whatsAppMessageSender.sendMessageDelete(prenotazione);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		
+	}
 }
