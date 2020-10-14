@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.server.domain.Attivita;
+import it.server.domain.UtenteAttivita;
 import it.server.repository.AttivitaRepository;
 import it.server.service.AttivitaService;
 
 @Service
 @Transactional
-public class AttivitaServiceImpl implements AttivitaService{
-	
+public class AttivitaServiceImpl implements AttivitaService {
+
 	@Autowired
 	private AttivitaRepository attivitaRepository;
 
@@ -24,7 +25,7 @@ public class AttivitaServiceImpl implements AttivitaService{
 	}
 
 	@Override
-	public List<Attivita> findAttivitaHome(){
+	public List<Attivita> findAttivitaHome() {
 		return attivitaRepository.findByHomePage(true);
 	}
 
@@ -51,6 +52,11 @@ public class AttivitaServiceImpl implements AttivitaService{
 	@Override
 	public List<Attivita> findAttivitaByLuogo(String luogo) {
 		return attivitaRepository.findByLuogo(luogo);
+	}
+
+	@Override
+	public Attivita findAttivitaByUtenteAttivita(UtenteAttivita utenteAttivita) {
+		return attivitaRepository.findByUtenteAttivita(utenteAttivita);
 	}
 
 }

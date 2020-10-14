@@ -1,5 +1,7 @@
 package it.server.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,8 @@ import it.server.security.UserDetailsImpl;
 public class UtenteAttivitaController {
     
     @Autowired
-    private UtenteAttivitaService utenteAttivitaService;
-
+	private UtenteAttivitaService utenteAttivitaService;
+	
     @Value("${jwt.header}")
 	private String tokenHeader;
 
@@ -58,7 +60,12 @@ public class UtenteAttivitaController {
 		response.setHeader(tokenHeader, token);
 
 		// Ritorno l'utente
-		return ((UserDetailsImpl) userDetails).getUtente();
+		UtenteAttivita utente = ((UserDetailsImpl) userDetails).getUtente();
+		Date expire = new Date();
+		utente.setExpire(expire.getTime() + 7200000);
+		utente.setxAuth(token);
+
+		return utente;
 	}
 
     @PostMapping

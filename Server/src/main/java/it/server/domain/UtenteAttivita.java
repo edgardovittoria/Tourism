@@ -1,12 +1,12 @@
 package it.server.domain;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "utentiAttivita")
@@ -21,6 +21,10 @@ public class UtenteAttivita {
     private String username;
     @Column
     private String password;
+    @Transient
+    private String xAuth;
+    @Transient
+    private Long expire;
 
     public UtenteAttivita() {
     }
@@ -57,7 +61,22 @@ public class UtenteAttivita {
         this.password = password;
     }
 
+    public String getxAuth() {
+        return xAuth;
+    }
+
+    public void setxAuth(String xAuth) {
+        this.xAuth = xAuth;
+    }
+
+    public Long getExpire() {
+        return expire;
+    }
+
+    public void setExpire(Long expire) {
+        this.expire = expire;
+    }
+
     
- 
     
 }

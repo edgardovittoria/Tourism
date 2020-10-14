@@ -1,8 +1,6 @@
 package it.server.controller;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.server.domain.Attivita;
 import it.server.domain.Prenotazione;
 import it.server.domain.Turista;
+import it.server.domain.UtenteAttivita;
+import it.server.service.AttivitaService;
 import it.server.service.PrenotazioneService;
 import it.server.service.TuristaService;
 //import it.server.utility.WhatsAppMessageSender;
+import it.server.service.UtenteAttivitaService;
 
 @RestController
 @CrossOrigin
@@ -33,6 +35,10 @@ public class AdminController {
 	private PrenotazioneService prenotazioneService;
 	@Autowired
 	private TuristaService turistaService;
+	@Autowired
+	private AttivitaService attivitaService;
+	@Autowired
+	private UtenteAttivitaService utenteAttivitaService;
 	//@Autowired
 	//private WhatsAppMessageSender whatsAppMessageSender;
 	
@@ -42,15 +48,15 @@ public class AdminController {
 		return new ResponseEntity<List<Prenotazione>>(prenotazioni, HttpStatus.OK);
 	}
 	
-	
-	@GetMapping("{data}")
-	public ResponseEntity<List<Prenotazione>> getPrenotazioniByDataSvolgimento(
-			@PathVariable("data") String data) throws ParseException{
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime date = LocalDateTime.parse(data, formatter);
-		List<Prenotazione> prenotazioni = prenotazioneService.findPrenotazioneByDataSvolgimentoAttivita(date);
-		return new ResponseEntity<List<Prenotazione>>(prenotazioni, HttpStatus.OK);
+	@GetMapping("{utenteAttivita}")
+	public ResponseEntity<List<Prenotazione>> getPrenotazioniByUtenteAttivita(
+		@PathVariable("utenteAttivita") String username) throws ParseException{
+			UtenteAttivita utente = utenteAttivitaService.findUtenteAttivitaByUsername(username);
+			Attivita attivita = attivitaService.findAttivitaByUtenteAttivita(utente);
+			List<Prenotazione> prenotazioni = prenotazioneService.findPrenotazioneByAttivita(attivita);
+			return new ResponseEntity<List<Prenotazione>>(prenotazioni, HttpStatus.OK);
 	}
+	
 	
 	@PostMapping
 	public ResponseEntity<Prenotazione> storePrenotazione(
