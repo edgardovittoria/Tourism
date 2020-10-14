@@ -14,7 +14,12 @@ class MyHome extends Component {
     render() {
         return (
             <div>
-                <MyHeader />
+                <MyHeader login={this.props.login}
+                    fetchPrenotazioniAdmin={this.props.fetchPrenotazioniAdmin}
+                    postPrenotazione={this.props.postPrenotazioneAdmin}
+                    deletePrenotazione={this.props.deletePrenotazioneAdmin}
+                    updatePrenotazione={this.props.updatePrenotazioneAdmin} 
+                    utente={this.props.utente}/>
                 <MyCarousel />
                 <FormRicerca />
                 <AttivitaNeiPaesi/>

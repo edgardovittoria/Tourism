@@ -13,7 +13,6 @@ function AttivitaPopolari(props) {
         );
       }
       else if (props.errMess) {
-        console.log(props.errMess.message)            
         return (
           <div className="container">
             <div className="row">

@@ -41,6 +41,8 @@ class Admin extends Component {
 
   componentDidMount(){
     fillCalendar(this.props, this.data);
+    //ricavare le prenotazioni e gestire il token(sessione?? o altro)
+    //this.props.fetchPrenotazioniAdmin
   }
 
   getTimeString(value) {

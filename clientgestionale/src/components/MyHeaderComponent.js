@@ -15,6 +15,7 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import Admin from './AdminComponent';
 import Headroom from 'react-headroom';
 import { NavLink } from "react-router-dom";
 
@@ -66,13 +67,13 @@ class MyHeader extends Component {
   }
 
   handleLogin(event) {
-    this.toggleModal();
-    alert(
-      " Username: " + this.username.value +
-      " Password: " + this.password.value +
-      " Remember: " + this.remember.checked
-    );
+    var utente = {
+      username: this.username.value,
+      password: this.password.value
+    }
+    this.props.login(utente);
     event.preventDefault();
+    this.toggleModal();
   }
 
   render() {
@@ -164,7 +165,6 @@ class MyHeader extends Component {
               </ModalBody>
             </Modal>
           </div>
-        
       </React.Fragment>
     )
   }
